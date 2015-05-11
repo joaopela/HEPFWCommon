@@ -1,4 +1,4 @@
-#include "Plots/Style/interface/Style.h"
+#include "HEPFWCommon/Style/interface/Style.h"
 
 hepfw::Style::Style(){}
 
