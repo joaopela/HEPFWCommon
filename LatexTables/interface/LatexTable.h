@@ -1,7 +1,7 @@
 #ifndef LATEX_TABLES_LATEXTABLE
 #define LATEX_TABLES_LATEXTABLE
 
-#include "Latex/Core/interface/LatexEnvironment.h"
+#include "HEPFWCommon/LatexCore/interface/LatexEnvironment.h"
 
 // C++ Included
 #include <string>

@@ -1,4 +1,4 @@
-#include "Latex/Alignment/interface/LatexCenter.h"
+#include "HEPFWCommon/LatexBasics/interface/LatexCenter.h"
 
 using namespace std;
 

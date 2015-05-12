@@ -1,7 +1,7 @@
 #ifndef LATEX_CORE_LATENVIRONMENT
 #define LATEX_CORE_LATENVIRONMENT
 
-#include "Latex/Core/interface/LatexObject.h"
+#include "HEPFWCommon/LatexCore/interface/LatexObject.h"
 
 // C++ Included
 #include <string>

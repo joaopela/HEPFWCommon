@@ -1,7 +1,7 @@
 #ifndef LATEX_TABLES_LATEXCAPTION
 #define LATEX_TABLES_LATEXCAPTION
 
-#include "Latex/Core/interface/LatexObject.h"
+#include "HEPFWCommon/LatexCore/interface/LatexObject.h"
 
 // C++ Included
 #include <string>

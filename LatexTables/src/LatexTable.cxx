@@ -1,4 +1,4 @@
-#include "Latex/Table/interface/LatexTable.h"
+#include "HEPFWCommon/LatexTables/interface/LatexTable.h"
 
 using namespace std;
 

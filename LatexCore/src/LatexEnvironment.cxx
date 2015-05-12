@@ -1,4 +1,4 @@
-#include "Latex/Core/interface/LatexEnvironment.h"
+#include "HEPFWCommon/LatexCore/interface/LatexEnvironment.h"
 
 using namespace std;
 

@@ -1,4 +1,4 @@
-#include "Latex/Table/interface/LatexCaption.h"
+#include "HEPFWCommon/LatexTables/interface/LatexCaption.h"
 
 #include "TString.h"
 

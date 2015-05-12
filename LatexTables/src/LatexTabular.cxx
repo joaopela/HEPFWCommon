@@ -1,4 +1,4 @@
-#include "Latex/Table/interface/LatexTabular.h"
+#include "HEPFWCommon/LatexTables/interface/LatexTabular.h"
 
 #include <iostream>
 

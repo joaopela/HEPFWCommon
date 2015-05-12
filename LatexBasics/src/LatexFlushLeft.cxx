@@ -1,4 +1,4 @@
-#include "Latex/Alignment/interface/LatexFlushLeft.h"
+#include "HEPFWCommon/LatexBasics/interface/LatexFlushLeft.h"
 
 using namespace std;
 

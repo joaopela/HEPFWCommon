@@ -1,7 +1,7 @@
 #ifndef LATEX_ALIGNMENT_LATEXFLUSHLEFT
 #define LATEX_ALIGNMENT_LATEXFLUSHLEFT
 
-#include "Latex/Core/interface/LatexEnvironment.h"
+#include "HEPFWCommon/LatexCore/interface/LatexEnvironment.h"
 
 // C++ Included
 #include <string>

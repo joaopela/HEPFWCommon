@@ -1,7 +1,7 @@
 #ifndef LATEX_TABLES_LATEXTABULARROW
 #define LATEX_TABLES_LATEXTABULARROW
 
-#include "Latex/Table/interface/LatexTabularCell.h"
+#include "HEPFWCommon/LatexTables/interface/LatexTabularCell.h"
 
 // C++ Included
 #include <string>

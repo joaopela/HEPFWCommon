@@ -1,8 +1,8 @@
 #ifndef LATEX_TABLES_LATEXTABULAR
 #define LATEX_TABLES_LATEXTABULAR
 
-#include "Latex/Core/interface/LatexEnvironment.h"
-#include "Latex/Table/interface/LatexTabularRow.h"
+#include "HEPFWCommon/LatexCore/interface/LatexEnvironment.h"
+#include "HEPFWCommon/LatexTables/interface/LatexTabularRow.h"
 
 // C++ Included
 #include <string>

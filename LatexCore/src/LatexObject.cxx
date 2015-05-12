@@ -1,4 +1,4 @@
-#include "Latex/Core/interface/LatexObject.h"
+#include "HEPFWCommon/LatexCore/interface/LatexObject.h"
 
 #include <TString.h>
 

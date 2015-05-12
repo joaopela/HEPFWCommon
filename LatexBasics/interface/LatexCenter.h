@@ -1,7 +1,7 @@
 #ifndef LATEX_ALIGNMENT_LATEXCENTER
 #define LATEX_ALIGNMENT_LATEXCENTER
 
-#include "Latex/Core/interface/LatexEnvironment.h"
+#include "HEPFWCommon/LatexCore/interface/LatexEnvironment.h"
 
 // C++ Included
 #include <string>

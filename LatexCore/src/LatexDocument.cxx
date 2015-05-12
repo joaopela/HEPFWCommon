@@ -1,0 +1,1 @@
+#include "HEPFWCommon/LatexCore/interface/LatexDocument.h"
