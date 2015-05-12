@@ -1,7 +1,7 @@
 // TODO: Description
 
 // ICTools includes
-#include "Histograms/Analysis/interface/HistogramCollection.h"
+#include "HEPFWCommon/Histograms/interface/HistogramCollection.h"
 
 #include "TH1D.h"
 #include "TCanvas.h"

@@ -1,4 +1,4 @@
-#include "Histograms/Analysis/interface/HistogramDataToSimCompare.h"
+#include "HEPFWCommon/Histograms/interface/HistogramDataToSimCompare.h"
 
 #include <iostream>
 

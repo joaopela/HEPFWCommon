@@ -1,8 +1,7 @@
 #ifndef PLOTS_TOOLS_PLOTFWD
 #define PLOTS_TOOLS_PLOTFWD
 
-// IC Framework included
-#include "Plots/Tools/interface/ICPlotCollection.h"
+#include "HEPFWCommon/Histograms/interface/HistogramCollection.h"
 
 // ROOT Includes
 #include "TH1F.h"
@@ -15,16 +14,16 @@
 #include <string>
 #include <utility>
 
-typedef hepfw::PlotCollection<int,TH1I> hepfw::MapInt_ICH1I;
-typedef hepfw::PlotCollection<int,TH1F> hepfw::MapInt_ICH1F;
-typedef hepfw::PlotCollection<int,TH1D> hepfw::MapInt_ICH1D;
-typedef hepfw::PlotCollection<int,TH2F> hepfw::MapInt_ICH2F;
-typedef hepfw::PlotCollection<int,TH2D> hepfw::MapInt_ICH2D;
+typedef hepfw::HistogramCollection<int,TH1I> hepfw::Map_int_H1I;
+typedef hepfw::HistogramCollection<int,TH1F> hepfw::Map_int_H1F;
+typedef hepfw::HistogramCollection<int,TH1D> hepfw::Map_int_H1D;
+typedef hepfw::HistogramCollection<int,TH2F> hepfw::Map_int_H2F;
+typedef hepfw::HistogramCollection<int,TH2D> hepfw::Map_int_H2D;
 
-typedef hepfw::PlotCollection<std::string,TH1I> hepfw::MapString_ICH1I;
-typedef hepfw::PlotCollection<std::string,TH1F> hepfw::MapString_ICH1F;
-typedef hepfw::PlotCollection<std::string,TH1D> hepfw::MapString_ICH1D;
-typedef hepfw::PlotCollection<std::string,TH2F> hepfw::MapString_ICH2F;
-typedef hepfw::PlotCollection<std::string,TH2D> hepfw::MapString_ICH2D;
+typedef hepfw::HistogramCollection<std::string,TH1I> hepfw::Map_string_H1I;
+typedef hepfw::HistogramCollection<std::string,TH1F> hepfw::Map_string_H1F;
+typedef hepfw::HistogramCollection<std::string,TH1D> hepfw::Map_string_H1D;
+typedef hepfw::HistogramCollection<std::string,TH2F> hepfw::Map_string_H2F;
+typedef hepfw::HistogramCollection<std::string,TH2D> hepfw::Map_string_H2D;
 
 #endif
