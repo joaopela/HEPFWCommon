@@ -1,0 +1,9 @@
+<use name="root"/>
+<use name="rootgraphics"/>
+<use name="HEPFWCommon/LatexCore"/>
+
+<export>
+  <lib   name="1"/>
+</export>
+
+<flags CXXFLAGS="-g"/>
