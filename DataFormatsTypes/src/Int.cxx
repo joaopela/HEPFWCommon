@@ -1,4 +1,4 @@
-#include "FWCore/DataFormats/interface/Int.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Int.h"
 
 hepfw::Int::Int(){
   m_varType = hepfw::kInt;  

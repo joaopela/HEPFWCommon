@@ -1,4 +1,4 @@
-#include "FWCore/DataFormats/interface/Double.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Double.h"
 
 hepfw::Double::Double(){
   m_varType = hepfw::kDouble;  

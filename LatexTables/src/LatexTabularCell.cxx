@@ -1,11 +1,11 @@
 #include "HEPFWCommon/LatexTables/interface/LatexTabularCell.h"
 
-#include "FWCore/DataFormats/interface/Bool.h"
-#include "FWCore/DataFormats/interface/Int.h"
-#include "FWCore/DataFormats/interface/Unsigned.h"
-#include "FWCore/DataFormats/interface/Float.h"
-#include "FWCore/DataFormats/interface/Double.h"
-#include "FWCore/DataFormats/interface/String.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Bool.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Int.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Unsigned.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Float.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Double.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/String.h"
 
 #include "TString.h"
 #include <iostream>

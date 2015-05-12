@@ -1,4 +1,4 @@
-#include "FWCore/DataFormats/interface/Float.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Float.h"
 
 hepfw::Float::Float(){
   m_varType = hepfw::kFloat;  
