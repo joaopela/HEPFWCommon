@@ -1,4 +1,4 @@
-#include "FWCore/DataFormats/interface/String.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/String.h"
 
 using namespace std;
 

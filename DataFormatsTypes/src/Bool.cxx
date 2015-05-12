@@ -1,4 +1,4 @@
-#include "FWCore/DataFormats/interface/Bool.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/Bool.h"
 
 hepfw::Bool::Bool(){
   m_varType = hepfw::kBool;  

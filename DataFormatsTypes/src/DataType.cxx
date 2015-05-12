@@ -1,4 +1,4 @@
-#include "FWCore/DataFormats/interface/DataType.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/DataType.h"
 
 using namespace std;
 

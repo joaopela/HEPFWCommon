@@ -1,7 +1,7 @@
 #ifndef LATEX_TABLES_LATEXTABULARCELL
 #define LATEX_TABLES_LATEXTABULARCELL
 
-#include "FWCore/DataFormats/interface/DataType.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/DataType.h"
 
 // C++ Included
 #include <string>

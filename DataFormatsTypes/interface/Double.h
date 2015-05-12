@@ -1,7 +1,7 @@
 #ifndef FWCORE_DATAFORMATS_DOUBLE
 #define FWCORE_DATAFORMATS_DOUBLE
 
-#include "FWCore/DataFormats/interface/DataType.h"
+#include "HEPFWCommon/DataFormatsTypes/interface/DataType.h"
 
 // C++ Included
 #include <string>
