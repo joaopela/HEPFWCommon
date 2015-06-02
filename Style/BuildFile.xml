@@ -1,4 +1,8 @@
 <use name="root"/>
 <use name="rootgraphics"/>
-<flags EDM_PLUGIN="1"/>
+
+<export>
+  <lib   name="1"/>
+</export>
+
 <flags CXXFLAGS="-g"/>
