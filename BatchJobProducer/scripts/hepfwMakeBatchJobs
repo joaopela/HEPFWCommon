@@ -33,10 +33,10 @@ def makeJobs_CMSSW():
   
   jobOutFilePath = jobName+".sh"
   
-  if not os.path.exists(args['outDir']):
-    os.makedirs(args['outDir'])
+  if not os.path.exists(jobName):
+    os.makedirs(jobName)
   
-  outDir          = os.path.abspath(args['outDir'])
+  outDir          = os.path.abspath(jobName)
   cmsswDir        = os.environ["CMSSW_BASE"]+"/src/"
   cmsswOuputDir   = outDir.replace(cmsswDir,'')
   cmsswScramArch  = os.environ["SCRAM_ARCH"]
@@ -44,24 +44,22 @@ def makeJobs_CMSSW():
   #jobFilePath     = args['job']
   #jobFilePostPath = args['jobPost']
   
-  fSubmit = open(outDir+'/submitJobs.sh','w')
+  fSubmit = open(jobName+'/submitJobs.sh','w')
   fSubmit.write("#!/bin/sh\n")
   fSubmit.write("\n")
   
   for jobNumber in range(1,numberOfJobs+1):
   
     submitCmd = "bsub -q "+batchQueue
-  
-    cfgFileBasename    = os.path.basename(cmsswCfg)
-    pointPosition      = cfgFileBasename.index('.')
-    cfgOutFileBasename = cfgFileBasename[:pointPosition]+'_'+str(jobNumber)+cfgFileBasename[pointPosition:]
-    cfgOutFilePath     = outDir+"/"+cfgOutFileBasename
-    cfgOutFileBasenameA, cfgOutFileBasenameB = os.path.splitext(cfgOutFileBasename)
+    
+    cfgOutFilePath = jobName+"/job_"+str(jobNumber)+".py"
   
     with open(cfgOutFilePath,'w') as new_file:
       with open(cmsswCfg) as old_file:
+
         for line in old_file:
-          line0 = line .replace("jobNumber=0", "jobNumber="+str(jobNumber))
+  
+          line0 = line if itText=='DONOTUSE' else line.replace(itText,str(jobNumber))
           line1 = line0.replace("process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))",
                                   "process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32("+eventsPerJob+"))")
           new_file.write(line1)
@@ -70,17 +68,16 @@ def makeJobs_CMSSW():
     old_file.close()
     
     # Making job executable 
-    jobFileBasename    = os.path.basename(jobTemplatePath)
-    pointPosition      = jobFileBasename.index('.')
-    jobOutFileBasename = jobFileBasename[:pointPosition]+'_'+str(jobNumber)+jobFileBasename[pointPosition:]
-    jobOutFilePath     = outDir+"/"+jobOutFileBasename
+    jobOutFileBase = "job_"+str(jobNumber)
+    jobOutFileName = "job_"+str(jobNumber)+".sh"
+    jobOutFilePath = jobName+"/job_"+str(jobNumber)+".sh"
     
     with open(jobOutFilePath,'w') as new_file:
       with open(jobTemplatePath) as old_file:
         for line in old_file:
           
           line0 = line .replace("CMSSW_DIR=",       "CMSSW_DIR="+cmsswDir)
-          line1 = line0.replace("CMSSW_JOB_CFG=",   "CMSSW_JOB_CFG="+cfgOutFileBasenameA)
+          line1 = line0.replace("CMSSW_JOB_CFG=",   "CMSSW_JOB_CFG="+jobOutFileBase)
           line2 = line1.replace("CMSSW_JOB_DIR=",   "CMSSW_JOB_DIR="+cmsswOuputDir)
           line3 = line2.replace("CMSSW_SCRAM_ARCH=","CMSSW_SCRAM_ARCH="+cmsswScramArch)
           new_file.write(line3)
@@ -89,17 +86,15 @@ def makeJobs_CMSSW():
     new_file.close()
     os.chmod(jobOutFilePath, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
   
-    jobPostFileBasename     = os.path.basename(jobPostTemplatePath)
-    pointPosition           = jobPostFileBasename.index('.')
-    jobPostOutFileBasename  = jobPostFileBasename[:pointPosition]+'_'+str(jobNumber)+jobPostFileBasename[pointPosition:]
-    jobPostOutFilePath      = outDir+"/"+jobPostOutFileBasename
+    # Making job post executable 
+    jobPostOutFilePath = jobName+"/jobPos_"+str(jobNumber)+".sh"
     
     with open(jobPostOutFilePath,'w') as new_file:
       with open(jobPostTemplatePath) as old_file:
         for line in old_file:
           
           line0 = line .replace("CMSSW_DIR=",    "CMSSW_DIR="+cmsswDir)
-          line1 = line0.replace("CMSSW_JOB_CFG=","CMSSW_JOB_CFG="+cfgOutFileBasenameA)
+          line1 = line0.replace("CMSSW_JOB_CFG=","CMSSW_JOB_CFG="+jobOutFileBase)
           line2 = line1.replace("CMSSW_JOB_DIR=","CMSSW_JOB_DIR="+cmsswScramArch)
           new_file.write(line2)
     
@@ -107,31 +102,32 @@ def makeJobs_CMSSW():
     new_file.close()
     os.chmod(jobPostOutFilePath, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     
-    submitCmd += " -Ep \""+jobPostOutFilePath+"\""
+    submitCmd += " -Ep \""+os.path.abspath(jobPostOutFilePath)+"\""
     
-    submitCmd += " "+jobOutFileBasename+"\n"
+    submitCmd += " "+jobOutFileName+"\n"
     fSubmit.write(submitCmd)
     
   fSubmit.close()
-  os.chmod(outDir+'/submitJobs.sh', stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+  os.chmod(jobName+'/submitJobs.sh', stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 
 
-
+import time
 import argparse
 
+tmpName = 'job_'+time.strftime('%Y-%m-%d_%H-%M-%S')
+
 parser = argparse.ArgumentParser(description='Create batch jobs')
-parser.add_argument('-jobType', default='cmssw',    help='Specify job type. Currently available: cmssw and bash')
-parser.add_argument('-nJobs',   default=1,          help='Number of jobs')
-parser.add_argument('-jobCmd',  default='ls',       help='Command to be executed. (Only for bash jobs)')
-parser.add_argument('-jobQueue',default='1nh',      help='Batch queue for the jobs to be submitted')
-parser.add_argument('-jobName', default='job',      help='Name for this job. No spaces allowed.')
-parser.add_argument('-itText' , default='NONE',     help='Text to be replaced in the configuration file for each job with the job number (0,1,2,3)')
+parser.add_argument('-jobType', default='cmssw',   help='Specify job type. Currently available: cmssw and bash')
+parser.add_argument('-nJobs',   default=1,         help='Number of jobs')
+parser.add_argument('-jobCmd',  default='ls',      help='Command to be executed. (Only for bash jobs)')
+parser.add_argument('-jobQueue',default='1nh',     help='Batch queue for the jobs to be submitted')
+parser.add_argument('-jobName', default=tmpName,   help='Name for this job. No spaces allowed.')
+parser.add_argument('-itText' , default='DONOTUSE',help='Text to be replaced in the configuration file for each job with the job number (1,2,3,..,nJobs)')
 
 #CMSSW Arguments
 parser.add_argument('-cmsswCfg',               help='Python file')
 parser.add_argument('-jobNEvents',default='-1',help='Events per jobs')
-parser.add_argument('-outDir',    default='./',help='Output dir')
 
 #Processing
 args = vars(parser.parse_args())
@@ -140,7 +136,7 @@ numberOfJobs = int(args['nJobs'])
 batchQueue   = args['jobQueue']
 eventsPerJob = args['jobNEvents']
 jobName      = args['jobName']
-
+itText       = args['itText']
 
 print "###############################"
 print "### Automatic job generator ###"
@@ -156,8 +152,8 @@ if args['jobType']=='cmssw':
   print "Python file         :",cmsswCfg
   print "Number of jobs      :",numberOfJobs
   print "Events per job      :",eventsPerJob
-  print "Output dir          :",args['outDir']
-  print ""
+  if itText != 'DONOTUSE':
+    print "Text to replace     :",itText
 
   makeJobs_CMSSW()
 
