@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+def
+
+def job_status():
+  
+  print "Summary of job status:"
+
+
+import os
+import stat
+
+parser = argparse.ArgumentParser(description='Create batch jobs')
+parser.add_argument('-task',    default='status',  help='What task you want to preform')
+parser.add_argument('-jobType', default='cmssw',   help='Specify job type. Currently available: cmssw and bash')
+parser.add_argument('-jobQueue',default='1nh',     help='Batch queue for the jobs to be submitted')
+parser.add_argument('-jobDir',  default='./',      help='Specify job directory.')
+
+args = vars(parser.parse_args())
+
+if args['task'] = 'status':
+  job_status()
