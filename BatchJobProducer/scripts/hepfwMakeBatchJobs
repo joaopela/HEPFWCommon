@@ -91,11 +91,18 @@ def makeJobs_CMSSW():
       with open(jobTemplatePath) as old_file:
         for line in old_file:
           
+          
+          
           line0 = line .replace("CMSSW_DIR=",       "CMSSW_DIR="+cmsswDir)
           line1 = line0.replace("CMSSW_JOB_CFG=",   "CMSSW_JOB_CFG="+jobOutFileBase)
           line2 = line1.replace("CMSSW_JOB_DIR=",   "CMSSW_JOB_DIR="+cmsswOuputDir)
           line3 = line2.replace("CMSSW_SCRAM_ARCH=","CMSSW_SCRAM_ARCH="+cmsswScramArch)
-          new_file.write(line3)
+          
+          line4 = line3.replace("JOB_DO_JOBLOG=","JOB_DO_JOBLOG="+getJobLog)
+          line5 = line4.replace("JOB_DO_CPULOG=","JOB_DO_CPULOG="+getCpuLog)
+          line6 = line5.replace("JOB_DO_MEMLOG=","JOB_DO_MEMLOG="+getMemLog)
+
+          new_file.write(line6)
   
     old_file.close()
     new_file.close()
@@ -135,16 +142,22 @@ tmpName = 'job_'+time.strftime('%Y-%m-%d_%H-%M-%S')
 parser = argparse.ArgumentParser(description='Create batch jobs')
 parser.add_argument('-jobType', default='cmssw',   help='Specify job type. Currently available: cmssw and bash')
 parser.add_argument('-nJobs',   default=1,         help='Number of jobs')
-parser.add_argument('-jobCmd',  default='ls',      help='Command to be executed. (Only for bash jobs)')
 parser.add_argument('-jobQueue',default='1nh',     help='Batch queue for the jobs to be submitted')
 parser.add_argument('-jobName', default=tmpName,   help='Name for this job. No spaces allowed.')
 parser.add_argument('-itText' , default='DONOTUSE',help='Text to be replaced in the configuration file for each job with the job number (1,2,3,..,nJobs)')
 
-#CMSSW Arguments
+parser.add_argument('-getJobLog',default=False,action='store_true',help='Produce a separated job only log')
+parser.add_argument('-getCpuLog',default=False,action='store_true',help='Produce log with the CPU information')
+parser.add_argument('-getMemLog',default=False,action='store_true',help='Produce log with the Memory information')
+
+# Bash arguments
+parser.add_argument('-jobCmd',  default='ls',      help='Command to be executed. (Only for bash jobs)')
+
+# CMSSW Arguments
 parser.add_argument('-cmsswCfg',               help='Python file')
 parser.add_argument('-jobNEvents',default='-1',help='Events per jobs')
 
-#Processing
+# Processing
 args = vars(parser.parse_args())
 
 numberOfJobs = int(args['nJobs'])
@@ -153,11 +166,27 @@ eventsPerJob = args['jobNEvents']
 jobName      = args['jobName']
 itText       = args['itText']
 
+if args['getJobLog']:
+  getJobLog = 'TRUE'
+else:
+  getJobLog = 'FALSE'
+
+if args['getCpuLog']:
+  getCpuLog = 'TRUE'
+else:
+  getCpuLog = 'FALSE'
+
+if args['getMemLog']:
+  getMemLog = 'TRUE'
+else:
+  getMemLog = 'FALSE'
+
 print "###############################"
 print "### Automatic job generator ###"
 print "###############################"
 print "Job Type            :",args['jobType']
 print "Batch queue         :",batchQueue
+print "Number of jobs      :",numberOfJobs
 
 if args['jobType']=='cmssw':
   
@@ -165,7 +194,6 @@ if args['jobType']=='cmssw':
   
   print "###############################"
   print "Python file         :",cmsswCfg
-  print "Number of jobs      :",numberOfJobs
   print "Events per job      :",eventsPerJob
   if itText != 'DONOTUSE':
     print "Text to replace     :",itText

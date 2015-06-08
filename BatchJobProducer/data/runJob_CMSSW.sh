@@ -1,5 +1,11 @@
 #!/bin/bash 
 
+# Job parameters
+JOB_DO_JOBLOG=
+JOB_DO_CPULOG=
+JOB_DO_MEMLOG=
+
+# CMSSW Parameters
 CMSSW_DIR=
 CMSSW_JOB_DIR=
 CMSSW_JOB_CFG=
@@ -15,8 +21,13 @@ eval `scram runtime -sh`
 
 cd $CMSSW_JOB_DIR
 
-cat /proc/cpuinfo |& tee $CMSSW_JOB_CFG.cpu.log
-cat /proc/meminfo |& tee $CMSSW_JOB_CFG.mem.log
+if [ "$JOB_DO_CPULOG" = "TRUE" ]; then
+  cat /proc/cpuinfo |& tee $CMSSW_JOB_CFG.cpu.log
+fi
+
+if [ "$JOB_DO_MEMLOG" = "TRUE" ]; then
+  cat /proc/meminfo |& tee $CMSSW_JOB_CFG.mem.log
+fi
 
 # Making job status
 rm -f $CMSSW_JOB_CFG.status.*
@@ -24,9 +35,14 @@ touch $CMSSW_JOB_CFG.status.running
 
 echo "Job start time: $(date)"
 
-cmsRun $CMSSW_JOB_CFG.py |& tee $CMSSW_JOB_CFG.job.log
-CMSSW_OUTPUT_CODE=${PIPESTATUS[0]}
-echo $CMSSW_OUTPUT_CODE
+if [ "$JOB_DO_JOBLOG" = "TRUE" ]; then
+  cmsRun $CMSSW_JOB_CFG.py |& tee $CMSSW_JOB_CFG.job.log
+  CMSSW_OUTPUT_CODE=${PIPESTATUS[0]}
+
+else
+  cmsRun $CMSSW_JOB_CFG.py
+  CMSSW_OUTPUT_CODE=$?
+fi
 
 echo "Job end time: $(date)"
 
