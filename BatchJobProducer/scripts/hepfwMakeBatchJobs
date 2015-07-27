@@ -48,9 +48,6 @@ def makeJobs_CMSSW():
   jobTemplatePath     = os.environ["CMSSW_BASE"]+"/src/HEPFWCommon/BatchJobProducer/data/runJob_CMSSW.sh"
   jobPostTemplatePath = os.environ["CMSSW_BASE"]+"/src/HEPFWCommon/BatchJobProducer/data/runJobPost_CMSSW.sh"
   
-  if not os.path.exists(jobName):
-    os.makedirs(jobName)
-  
   outDir          = os.path.abspath(jobName)
   cmsswDir        = os.environ["CMSSW_BASE"]+"/src/"
   cmsswOuputDir   = outDir.replace(cmsswDir,'')
@@ -63,6 +60,9 @@ def makeJobs_CMSSW():
   fSubmit.write("#!/bin/sh\n")
   fSubmit.write("\n")
   
+  fileList.splitByNumberOfFiles(numberOfJobs)
+    
+    
   for jobNumber in range(1,numberOfJobs+1):
   
     submitCmd = "bsub -q "+batchQueue
@@ -79,6 +79,9 @@ def makeJobs_CMSSW():
                                   "process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32("+eventsPerJob+"))")
           new_file.write(line1)
             
+            
+    
+    
     new_file.close()
     old_file.close()
     
@@ -132,17 +135,6 @@ def makeJobs_CMSSW():
   fSubmit.close()
   os.chmod(jobName+'/submitJobs.sh', stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
-
-def getDAS(datasetName):
-
-  from HEPFWCommon.BatchJobProducer.InputFileListProcessor import InputFileListProcessor
-
-  x = InputFileListProcessor()
-  x.getFromDAS(datasetName)
-  x.dump_CMSSW_cfi("test_cfi.py")
-
-
-
 import sys
 import time
 import argparse
@@ -151,14 +143,14 @@ tmpName = 'job_'+time.strftime('%Y-%m-%d_%H-%M-%S')
 
 parser = argparse.ArgumentParser(description='Create batch jobs')
 parser.add_argument('-jobType', default='cmssw',   help='Specify job type. Currently available: cmssw and bash')
+parser.add_argument('-jobName', default=tmpName,   help='Name for this job. No spaces allowed.')
+parser.add_argument('-nJobs',   default=1,         help='Number of jobs')
 
 # 
-parser.add_argument('-inputType',   default='fileList',help='Specify which is the file source. Currently available: fileList and das')
+parser.add_argument('-inputType',   default='fileList',help='Specify which is the file source. Currently available: none, fileList and das')
 parser.add_argument('-inputDataset',default='',        help='Specify which dataset to get from DAS.')
 
-parser.add_argument('-nJobs',   default=1,         help='Number of jobs')
 parser.add_argument('-jobQueue',default='1nh',     help='Batch queue for the jobs to be submitted')
-parser.add_argument('-jobName', default=tmpName,   help='Name for this job. No spaces allowed.')
 parser.add_argument('-itText' , default='DONOTUSE',help='Text to be replaced in the configuration file for each job with the job number (1,2,3,..,nJobs)')
 
 parser.add_argument('-getJobLog',default=False,action='store_true',help='Produce a separated job only log')
@@ -176,6 +168,7 @@ parser.add_argument('-jobNEvents',default='-1',help='Events per jobs')
 args = vars(parser.parse_args())
 
 numberOfJobs = int(args['nJobs'])
+jobType      = args['jobType']
 batchQueue   = args['jobQueue']
 eventsPerJob = args['jobNEvents']
 jobName      = args['jobName']
@@ -183,10 +176,44 @@ itText       = args['itText']
 inputType    = args['inputType']
 inputDataset = args['inputDataset']
 
+print "###############################"
+print "### Automatic job generator ###"
+print "###############################"
+print "Parameters:"
+print "=========== Section: Job ==========="
+print "Job Name            :",jobName
+print "Job Type            :",jobType
+print "Job number          :",numberOfJobs
+print "Job queue           :",batchQueue
+print ""
+
+print "=========== Section: Input ==========="
+print "Input type          :",inputType
 if inputType=="das":
-  
-  getDAS(inputDataset) 
-  sys.exit(1)
+  print "Input dataset       :",inputDataset
+
+print ""
+
+# Creating job directory
+if not os.path.exists(jobName):
+  os.makedirs(jobName)
+
+##############################
+# Input file list processing #
+##############################
+from HEPFWCommon.BatchJobProducer.InputFileListProcessor import InputFileListProcessor
+
+fileList = InputFileListProcessor()
+fileList.outputDir = jobName
+
+if inputType=="das":
+  fileList.getFromDAS(inputDataset)
+
+fileList.splitByNumberOfJobs(numberOfJobs)
+
+sys.exit()
+
+
 
 if args['getJobLog']:
   getJobLog = 'TRUE'
@@ -203,12 +230,6 @@ if args['getMemLog']:
 else:
   getMemLog = 'FALSE'
 
-print "###############################"
-print "### Automatic job generator ###"
-print "###############################"
-print "Job Type            :",args['jobType']
-print "Batch queue         :",batchQueue
-print "Number of jobs      :",numberOfJobs
 
 if args['jobType']=='cmssw':
   
