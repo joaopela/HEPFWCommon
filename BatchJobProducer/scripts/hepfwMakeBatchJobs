@@ -133,7 +133,17 @@ def makeJobs_CMSSW():
   os.chmod(jobName+'/submitJobs.sh', stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 
+def getDAS(datasetName):
 
+  from HEPFWCommon.BatchJobProducer.InputFileListProcessor import InputFileListProcessor
+
+  x = InputFileListProcessor()
+  x.getFromDAS(datasetName)
+  x.dump_CMSSW_cfi("test_cfi.py")
+
+
+
+import sys
 import time
 import argparse
 
@@ -141,6 +151,11 @@ tmpName = 'job_'+time.strftime('%Y-%m-%d_%H-%M-%S')
 
 parser = argparse.ArgumentParser(description='Create batch jobs')
 parser.add_argument('-jobType', default='cmssw',   help='Specify job type. Currently available: cmssw and bash')
+
+# 
+parser.add_argument('-inputType',   default='fileList',help='Specify which is the file source. Currently available: fileList and das')
+parser.add_argument('-inputDataset',default='',        help='Specify which dataset to get from DAS.')
+
 parser.add_argument('-nJobs',   default=1,         help='Number of jobs')
 parser.add_argument('-jobQueue',default='1nh',     help='Batch queue for the jobs to be submitted')
 parser.add_argument('-jobName', default=tmpName,   help='Name for this job. No spaces allowed.')
@@ -165,6 +180,13 @@ batchQueue   = args['jobQueue']
 eventsPerJob = args['jobNEvents']
 jobName      = args['jobName']
 itText       = args['itText']
+inputType    = args['inputType']
+inputDataset = args['inputDataset']
+
+if inputType=="das":
+  
+  getDAS(inputDataset) 
+  sys.exit(1)
 
 if args['getJobLog']:
   getJobLog = 'TRUE'
